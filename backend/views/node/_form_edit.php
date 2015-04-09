@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
                 break;
 
             case 'alias': ?>
-                <input type="checkbox" onchange="change_auto(this);" /><span>Auto Alias</span>
+                <input type="checkbox" onchange="change_auto(this);" /><b><span> Auto Alias</span></b>
             <?php
                 echo $form->field($model, 'alias')->textInput();
                 break;
@@ -67,32 +67,6 @@ use yii\widgets\ActiveForm;
         }
     }?>
 
-    <?php /*= $form->field($model, 'type_content')->textInput() ?>
-
-    <?= $form->field($model, 'node_parent_id')->textInput() ?>
-
-    <?= $form->field($model, 'title')->textInput(['maxlength' => 255]) ?>
-
-    <?= $form->field($model, 'alias')->textInput(['maxlength' => 255]) ?>
-
-    <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'body')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'enable')->textInput() ?>
-
-    <?= $form->field($model, 'create')->textInput() ?>
-
-    <?= $form->field($model, 'update')->textInput() ?>
-
-    <?= $form->field($model, 'lang')->textInput(['maxlength' => 255]) ?>
-
-    <?= $form->field($model, 'file')->textInput(['maxlength' => 255]) ?>
-
-    <?= $form->field($model, 'priority')->textInput() ?>
-
-    <?= $form->field($model, 'link')->textInput(['maxlength' => 255])*/ ?>
-
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
@@ -103,7 +77,20 @@ use yii\widgets\ActiveForm;
 <script type="text/javascript">
     function change_auto(e){
         var alias = document.getElementById('node-alias');
-        if(e.checked)
+        if(alias.value.trim() != '')
+            localStorage.setItem('custom_alias_value', alias.value);
+        if(e.checked){
             alias.value = '';
+            alias.style.display = 'none';
+        }else{
+            alias.style.display = 'block';
+            alias.value = localStorage.getItem('custom_alias_value');
+            localStorage.setItem('custom_alias_value', '');
+        }
     }
 </script>
+<style type="text/css">
+    .field-node-alias .control-label{
+        display: none;
+    }
+</style>

@@ -57,9 +57,13 @@ class Node extends \yii\db\ActiveRecord
     public function validateAlias(){
         $nodeFields =  new NodeField;
         $createAlias = new CreateAlias;
-        //var_dump($this->node_parent_id); exit();
+        //Alias existed
         if ($createAlias->__isAliasExisted($this->node_parent_id, $this->alias)){
             $this->addError('alias','Alias is already exists in this section!');
+        }
+        // Empty alias
+        if (trim($this->alias) == ''){
+            $this->addError('alias','Invalid Alias');
         }
     }
 

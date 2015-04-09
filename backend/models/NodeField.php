@@ -70,6 +70,7 @@ class NodeField extends \yii\db\ActiveRecord
             3   => Field::findOne(7),           //'body'
             4   => Field::findOne(8),           //'enable'
             5   => Field::findOne(11),          //'lang'
+            6   => Field::findOne(15),          //'is_menu'
         ];
     }
 }
