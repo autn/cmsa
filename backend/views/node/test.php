@@ -11,14 +11,14 @@ $uri = $_SERVER['REQUEST_URI'];
 
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-        <?php include('top-logo.php'); ?>
+        <?= $this->render('top-logo'); ?>
         <!-- /.navbar-header -->
 
-        <?php include('top-menu.php'); ?>
+        <?= $this->render('top-menu'); ?>
         <!-- /.navbar-top-links -->
 
         <div class="navbar-default sidebar" role="navigation">
-            <?php include('left-menu.php'); ?>
+            <?= $this->render('left-menu'); ?>
             <!-- /.sidebar-collapse -->
         </div>
         <!-- /.navbar-static-side -->
@@ -122,4 +122,4 @@ $uri = $_SERVER['REQUEST_URI'];
 
 </div>
 <!-- /#wrapper -->
-<?php include('script.php'); ?>
+<?= $this->render('script'); ?>

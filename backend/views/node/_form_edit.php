@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
                 break;
 
             case 'alias': ?>
-                <input type="checkbox" onchange="change_auto(this);" /><b><span> Auto Alias</span></b>
+                <input type="checkbox" onchange="change_auto(this);"/><b><span> Auto Alias</span></b>
             <?php
                 echo $form->field($model, 'alias')->textInput();
                 break;

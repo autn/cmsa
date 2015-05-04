@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use app\models\Node;
 ?>
 
+<?php $node = new Node; ?>
 <div class="sidebar-nav navbar-collapse">
     <ul class="nav" id="side-menu">
         <li class="sidebar-search">
@@ -18,67 +19,48 @@ use app\models\Node;
             </div>
             <!-- /input-group -->
         </li>
-        <li>
-            <a href="#"><i class="fa fa-dashboard fa-fw"></i> Content</a>
-            <?php $node = new Node; $node_menu = $node->getNode(0); ?>
-            <ul class="nav nav-first-level">
-            <?php foreach ($node_menu as $menuItem): ?>
-                <li>
-                    <?=Html::a($menuItem->title, 
-                        ['node/test/'.$menuItem->alias]) ?>
-                    <?php $child2 = $node->getNode($menuItem->id);
-                    if (!empty($child2)){ ?>
-                        <ul class="nav nav-second-level">
-                        <?php foreach ($child2 as $chile2Item): ?>
-                            <li>
-                                <?=Html::a($chile2Item->title, 
-                                    ['node/test/'. $menuItem->alias .'/'. $chile2Item->alias]) ?>
-                                <?php $child3 = $node->getNode($chile2Item->id);
-                                if (!empty($child3)){ ?>
-                                    <ul class="nav nav-third-level">
-                                    <?php foreach ($child3 as $child3Item) { ?>
-                                        <li>
-                                            <?=Html::a($child3Item->title, 
-                                                ['node/test/'. $menuItem->alias .'/'. $chile2Item->alias .'/'. $child3Item->alias]) ?>
-                                        </li>
-                                    <?php } ?>
-                                    </ul>
-                                <?php } ?>
-                            </li>
-                        <?php endforeach; ?>
-                        </ul>
-                    <?php } ?>
-                </li>
-            <?php endforeach; ?>
-            </ul>
-        </li>
+
         <?php 
-        $other_menu = $node->getNode(-1);
-        foreach($other_menu as $otherItem): ?>
+        $node_menu = $node->getNode(0);
+        foreach($node_menu as $menuItem): ?>
             <li>
-                <!-- <a href="#"><i class="fa fa-dashboard fa-fw"></i> <?= $otherItem->title ?></a> -->
-                <?=Html::a("-".$otherItem->title, 
-                                        ['node/test/'. $otherItem->alias]) ?>
-                <?php $node_menu = $node->getNode($otherItem->id); ?>
+                <!-- <a href="#"><i class="fa fa-dashboard fa-fw"></i> <?= $menuItem->title ?></a> -->
+                <a href="<?= Url::toRoute('node/test/'. $menuItem->alias) ?>">
+                    <i class="fa fa-dashboard fa-fw"></i>
+                    <?= $menuItem->title ?>
+                    <span class="fa arrow"></span>
+                </a>
+                <?php /*echoHtml::a("-".$menuItem->title, 
+                                        ['node/test/'. $menuItem->alias])*/ ?>
+                <?php $node_menu = $node->getNode($menuItem->id); ?>
                 <ul class="nav nav-first-level">
-                <?php foreach ($node_menu as $menuItem): ?>
+                <?php foreach ($node_menu as $childItem): ?>
                     <li>
-                        <?=Html::a($menuItem->title, 
-                            ['node/test/'.$otherItem->alias.'/'.$menuItem->alias]) ?>
-                        <?php $child2 = $node->getNode($menuItem->id);
+                        <a href="<?= Url::toRoute('node/test/'.$menuItem->alias.'/'.$childItem->alias) ?>">
+                            <i class="fa fa-dashboard fa-fw"></i>
+                            <?= $childItem->title ?>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <?php $child2 = $node->getNode($childItem->id);
                         if (!empty($child2)){ ?>
                             <ul class="nav nav-second-level">
                             <?php foreach ($child2 as $chile2Item): ?>
                                 <li>
-                                    <?=Html::a($chile2Item->title, 
-                                        ['node/test/'.$otherItem->alias.'/'. $menuItem->alias .'/'. $chile2Item->alias]) ?>
+                                <a href="<?= Url::toRoute('node/test/'.$menuItem->alias.'/'. $childItem->alias .'/'. $chile2Item->alias) ?>">
+                                    <i class="fa fa-dashboard fa-fw"></i>
+                                    <?= $chile2Item->title ?>
+                                    <span class="fa arrow"></span>
+                                </a>
                                     <?php $child3 = $node->getNode($chile2Item->id);
                                     if (!empty($child3)){ ?>
                                         <ul class="nav nav-third-level">
                                         <?php foreach ($child3 as $child3Item) { ?>
                                             <li>
-                                                <?=Html::a($child3Item->title, 
-                                                    ['node/test/'.$otherItem->alias.'/'. $menuItem->alias .'/'. $chile2Item->alias .'/'. $child3Item->alias]) ?>
+                                                <a href="<?= Url::toRoute('node/test/'.$menuItem->alias.'/'. $childItem->alias .'/'. $chile2Item->alias .'/'. $child3Item->alias) ?>">
+                                                    <i class="fa fa-dashboard fa-fw"></i>
+                                                    <?= $child3Item->title ?>
+                                                <span class="fa arrow"></span>
+                                                </a>
                                             </li>
                                         <?php } ?>
                                         </ul>
@@ -92,6 +74,42 @@ use app\models\Node;
                 </ul>
             </li>
         <?php endforeach; ?>
+
+        <li>
+            <a href="#"><i class="fa fa-dashboard fa-fw"></i> Other Content</a>
+            <?php $other_menu = $node->getNode(-1); ?>
+            <ul class="nav nav-first-level">
+            <?php foreach ($other_menu as $otherItem): ?>
+                <li>
+                    <?=Html::a($otherItem->title, 
+                        ['node/test/'.$otherItem->alias]) ?>
+                    <?php $child2 = $node->getNode($otherItem->id);
+                    if (!empty($child2)){ ?>
+                        <ul class="nav nav-second-level">
+                        <?php foreach ($child2 as $chile2Item): ?>
+                            <li>
+                                <?=Html::a($chile2Item->title, 
+                                    ['node/test/'. $otherItem->alias .'/'. $chile2Item->alias]) ?>
+                                <?php $child3 = $node->getNode($chile2Item->id);
+                                if (!empty($child3)){ ?>
+                                    <ul class="nav nav-third-level">
+                                    <?php foreach ($child3 as $child3Item) { ?>
+                                        <li>
+                                            <?=Html::a($child3Item->title, 
+                                                ['node/test/'. $otherItem->alias .'/'. $chile2Item->alias .'/'. $child3Item->alias]) ?>
+                                        </li>
+                                    <?php } ?>
+                                    </ul>
+                                <?php } ?>
+                            </li>
+                        <?php endforeach; ?>
+                        </ul>
+                    <?php } ?>
+                </li>
+            <?php endforeach; ?>
+            </ul>
+        </li>
+        
         <?php //echo Url::toRoute(['node/test', 'cate1' => 'computer']);
         //echo Html::a('label', ['/node/test']);
             /*$node = new Node; $menu = $node->getNode(0); 

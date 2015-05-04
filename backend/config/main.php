@@ -23,6 +23,8 @@ return [
                 '<alias:contact|about|login|logout>' => 'site/<alias>',
                 /*'<alias:product>/<id:\w+>' => 'site/<alias>',*/
                 //'<controller:\w+>/<cate1:\w+>' => '<controller>',
+                '<pp>/<action:\w+>' => 'node/<action>',
+                '<pp>' => 'node',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>/<cate1>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>/<cate1>/<cate2>' => '<controller>/<action>',
