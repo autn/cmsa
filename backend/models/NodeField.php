@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use app\models\Field;
+use app\models\Node;
 
 /**
  * This is the model class for table "cmsa_node_field".
@@ -46,8 +47,8 @@ class NodeField extends \yii\db\ActiveRecord
         ];
     }
 
-    public function fieldItem($id){
-        $field = NodeField::find()->where(['node_id' => $id])->one()->field_id;
+    public function fieldItem($id, $table = 'node'){
+        $field = NodeField::find()->where(['node_id' => $id, 'table' => $table])->one()->field_id;
         if(empty($field) || ($field==null) || ($field==''))
             return false;
         $a = explode(",", $field);
@@ -72,5 +73,34 @@ class NodeField extends \yii\db\ActiveRecord
             5   => Field::findOne(11),          //'lang'
             6   => Field::findOne(15),          //'is_menu'
         ];
+    }
+
+
+    public function getNodeField($listCate = []/*, $id = ''*/){
+        /*if(!empty($id)){
+            $thisField = $this->fieldItem($id);
+            $listCate[] = $thisField;
+        }
+        $listCate = array_reverse($listCate);*/
+        $field = $this->defaultField();
+        foreach ($listCate as $cate) {
+            if($cate){
+                $field = $cate;
+                break;
+            }
+        }
+        return $field;
+    }
+
+    public function getField($id, $table = 'node'){
+        $node = new Node;
+        $fields = [];
+        $family = $node->getFamily($id);
+
+        foreach ($family as $child) {
+            $fields[] = $this->fieldItem($child, $table);
+        }
+
+        return $field = $this->getNodeField($fields);
     }
 }

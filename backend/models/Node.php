@@ -92,7 +92,7 @@ class Node extends \yii\db\ActiveRecord
     }
 
     public function getNode($id){
-        return Node::find()->where(['node_parent_id' => $id])->all();
+        return Node::find()->where(['node_parent_id' => $id,'type_content'=>'0'])->all();
     }
 
     public function getMaxId(){
@@ -130,5 +130,64 @@ class Node extends \yii\db\ActiveRecord
             return ArrayHelper::map($parent, 'id', 'title');
         }
         //return [1=>2, 2=>3];
+    }
+
+    public function getNodeHtml($fields, $modelItem){
+        /*<thead>
+            <tr>
+            if(($fields) && ($fields!=NULL))
+                foreach ($fields as $field){
+                    echo "<th>". ucwords($field->label) ."</th>";
+                }
+            <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            if (isset($modelItem)) :
+                foreach ($modelItem as $item) { 
+                    $uri_edit = str_replace("/node/test", "/node/edit", $uri) ;
+                    if($isContent != 1) 
+                        $uri_edit .= '/' . $item['alias'];
+                    <tr class="odd gradeX">
+                    foreach ($fields as $field) {
+                        echo "<td>". $item[$field->name] ."</td>";
+                    }
+                        <td>
+                            <a href="<?=$uri_edit .'?continue='. $uri ?>"><span>Edit</span></a>
+                        </td>
+                    </tr>
+            } 
+            endif;
+                
+        </tbody>*/
+    }
+
+    public function getFamily($id){
+        $family = [];
+        $item_1 = Node::find()->where(['id' => $id])->one();
+        $family[] = $item_1->id;
+
+        if($item_1->node_parent_id > 0){
+            $item_2 = Node::find()->where(['id' => $item_1->node_parent_id])->one();
+            $family[] = $item_2->id;
+
+            if($item_2->node_parent_id > 0){
+                $item_3 = Node::find()->where(['id' => $item_2->node_parent_id])->one();
+                $family[] = $item_3->id;
+
+                if($item_3->node_parent_id > 0){
+                    $item_4 = Node::find()->where(['id' => $item_3->node_parent_id])->one();
+                    $family[] = $item_4->id;
+
+                    if($item_4->node_parent_id > 0){
+                        $item_5 = Node::find()->where(['id' => $item_4->node_parent_id])->one();
+                        $family[] = $item_5->id;
+                    }
+                }
+            }
+        }
+
+        return $family;
     }
 }

@@ -3,9 +3,14 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
 use app\models\Node;
-//var_export($modelItem); exit()
+use app\Models\NodeField;
+use app\models\NodeArticle;
 
 $uri = $_SERVER['REQUEST_URI'];
+$node = new Node;
+$modelItem = Node::find()->where(['node_parent_id' => $model->id])->all();
+$nodeField = new NodeField;
+$fields = $nodeField->getField($model->id, 'node');
 ?>
 <div id="wrapper">
 
@@ -37,25 +42,18 @@ $uri = $_SERVER['REQUEST_URI'];
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        DataTables Advanced Tables
+                        DataTables Category
                     </div>
-                    <?php
-                    /*$listFields = array(); 
-                    foreach ($fields as $field){
-                        $listFields[] = $field->name;
-                    } //echo($listFields); exit();
-                    $listFields[]= ['class' => 'yii\grid\ActionColumn'];*/
-                    ?>
-                    <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div class="dataTable_wrapper">
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <table class="table table-striped table-bordered table-hover dataTables-list-order">
                                 <thead>
                                     <tr>
                                     <?php
+                                    
                                     if(($fields) && ($fields!=NULL))
                                         foreach ($fields as $field){
-                                            echo "<th>". ucwords($field->name) ."</th>";
+                                            echo "<th>". ucwords($field->label) ."</th>";
                                         }
                                     ?>
                                     <th></th>
@@ -64,6 +62,7 @@ $uri = $_SERVER['REQUEST_URI'];
                                 <tbody>
                                     
                                     <?php
+                                    
                                     if (isset($modelItem)) :
                                         foreach ($modelItem as $item) { 
                                             $uri_edit = str_replace("/node/test", "/node/edit", $uri) ;
@@ -79,38 +78,28 @@ $uri = $_SERVER['REQUEST_URI'];
                                             </tr>
                                     <?php  } 
                                     endif;
-                                    ?>
-                                    
-                                    <!-- <tr class="even gradeC">
-                                        <td>Trident</td>
-                                        <td>Internet Explorer 5.0</td>
-                                        <td>Win 95+</td>
-                                        <td class="center">5</td>
-                                        <td class="center">C</td>
-                                    </tr>
-                                    <tr class="odd gradeA">
-                                        <td>Trident</td>
-                                        <td>Internet Explorer 5.5</td>
-                                        <td>Win 95+</td>
-                                        <td class="center">5.5</td>
-                                        <td class="center">A</td>
-                                    </tr>
-                                    <tr class="even gradeA">
-                                        <td>Trident</td>
-                                        <td>Internet Explorer 6</td>
-                                        <td>Win 98+</td>
-                                        <td class="center">6</td>
-                                        <td class="center">A</td>
-                                    </tr> -->
-                                    
+                                    ?>      
                                 </tbody>
                             </table>
                         </div>
-                        <!-- /.table-responsive -->
                     </div>
-                    <!-- /.panel-body -->
                 </div>
-                <!-- /.panel -->
+
+                <?php
+                $nodeArticle = new NodeArticle; ?>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        DataTables Article
+                    </div>
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <table class="table table-striped table-bordered table-hover dataTables-list-order">
+                                <?= $nodeArticle->getArticleHtml($model->id, $fields) ?>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -123,3 +112,10 @@ $uri = $_SERVER['REQUEST_URI'];
 </div>
 <!-- /#wrapper -->
 <?= $this->render('script'); ?>
+<script>   
+    $(document).ready(function() {
+        $('.dataTables-list-order').DataTable({
+            responsive: true
+        });
+    });
+</script>
